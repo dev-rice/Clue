@@ -1,0 +1,11 @@
+* commit f2384cdcee40b2bed94a72ef0faee7d487019287
+| Author: unknown <crice@MZ022-36.adit.mines.edu>
+| Date:   Thu Sep 26 11:52:09 2013 -0600
+| 
+|     Initial Commit, now with code\!
+|  
+* commit 4ed4072beaca60cd306b529bacd385fc6d7ebb96
+  Author: penguinpower <chrisrice93@gmail.com>
+  Date:   Thu Sep 26 10:49:39 2013 -0700
+  
+      Initial commit
