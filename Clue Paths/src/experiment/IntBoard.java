@@ -16,11 +16,11 @@ public class IntBoard {
 	}
 	
 	public Set<Integer> getTargets(){
-		return new Set<Integer>();
+		return null;
 	}
 	
 	public LinkedList<Integer> getAdjList(){
-		
+		return null;
 	}
 	
 	public int calcIndex(int row, int col){
