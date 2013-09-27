@@ -11,7 +11,7 @@ public class IntBoard {
 	public void calcAdjacencies(){
 		
 	}
-	public void startTargets(int row, int col, int numSteps){
+	public void startTargets(int index, int numSteps){
 		
 	}
 	
@@ -19,7 +19,7 @@ public class IntBoard {
 		return null;
 	}
 	
-	public LinkedList<Integer> getAdjList(){
+	public LinkedList<Integer> getAdjList(int index){
 		return null;
 	}
 	
