@@ -20,10 +20,6 @@ public class IntBoardTests {
 	public void init() {
 		board = new IntBoard();
 	}
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testCalcIndex() {
