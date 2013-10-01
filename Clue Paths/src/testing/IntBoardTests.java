@@ -71,7 +71,7 @@ public class IntBoardTests {
 		Assert.assertTrue(testList.contains(4));
 		Assert.assertTrue(testList.contains(6));
 		Assert.assertTrue(testList.contains(9));
-		Assert.assertEquals(2, testList.size());
+		Assert.assertEquals(4, testList.size());
 	}
 	
 	@Test
