@@ -97,8 +97,8 @@ public class IntBoardTests {
 		Assert.assertTrue(targets.contains(3));
 		Assert.assertTrue(targets.contains(4));
 	}
-	@Test
-	public void testTargets1_2() {
+	//@Test
+	/*public void testTargets1_2() {
 		board.startTargets(1, 2);
 		Set targets= board.getTargets();
 		Assert.assertEquals(4, targets.size());
@@ -146,6 +146,6 @@ public class IntBoardTests {
 		Assert.assertTrue(targets.contains(7));
 		Assert.assertTrue(targets.contains(10));
 
-	}
+	}*/
 	
 }
