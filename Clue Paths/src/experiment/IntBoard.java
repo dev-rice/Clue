@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 public class IntBoard {
+	
 	public IntBoard(){
 		
 	}
@@ -24,6 +25,10 @@ public class IntBoard {
 	}
 	
 	public int calcIndex(int row, int col){
-		return 0;
+		// Takes the column index and adds it to the size of the row multiplied by the row index
+		// This assumes we are using the 4x4 grid in the problem description
+		// example: at 1, 2 we take 2 + (1*4) = 6
+		
+		return col + row*4;
 	}
 }
