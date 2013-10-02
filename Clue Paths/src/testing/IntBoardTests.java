@@ -84,9 +84,8 @@ public class IntBoardTests {
 		Assert.assertEquals(4, testList.size());
 	}
 	
-	
-	//@Test
-	/*public void testTargets0_3() {
+	@Test
+	public void testTargets0_3() {
 		board.startTargets(0, 3);
 		Set targets= board.getTargets();
 		Assert.assertEquals(6, targets.size());
@@ -96,7 +95,8 @@ public class IntBoardTests {
 		Assert.assertTrue(targets.contains(6));
 		Assert.assertTrue(targets.contains(3));
 		Assert.assertTrue(targets.contains(4));
-	}*/
+	}
+	
 	@Test
 	public void testTargets1_2() {
 		board.startTargets(1, 2);
@@ -107,7 +107,8 @@ public class IntBoardTests {
 		Assert.assertTrue(targets.contains(6));
 		Assert.assertTrue(targets.contains(3));
 	}
-	/*@Test
+	
+	@Test
 	public void testTargets12_3() {
 		board.startTargets(12, 3);
 		Set targets= board.getTargets();
@@ -127,15 +128,17 @@ public class IntBoardTests {
 		Assert.assertTrue(targets.contains(11));
 		Assert.assertTrue(targets.contains(14));
 	}
+	
 	@Test
 	public void testTargets3_2() {
-		board.startTargets(3, 3);
+		board.startTargets(3, 2);
 		Set targets= board.getTargets();
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(1));
 		Assert.assertTrue(targets.contains(6));
 		Assert.assertTrue(targets.contains(11));
 	}
+	
 	@Test
 	public void testTargets6_1() {
 		board.startTargets(6, 1);
@@ -146,6 +149,6 @@ public class IntBoardTests {
 		Assert.assertTrue(targets.contains(7));
 		Assert.assertTrue(targets.contains(10));
 
-	}*/
+	}
 	
 }

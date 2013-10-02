@@ -44,27 +44,24 @@ public class IntBoard {
 		}
 	}
 	public void startTargets(int index, int numSteps){
-
-		System.out.println("Index:" + index + " Number of Steps left: " + numSteps);
-		
-		visited[index] = true;
 		LinkedList<Integer> tempList = getAdjList(index);
 		
-		if(numSteps>0){
+		System.out.println("Index: " + index + " with steps left: " + numSteps);
+	
+		if( numSteps > 0 ){
+			visited[index] = true;
 			for(int i = 0; i < tempList.size(); ++i){
-				System.out.println("Index:" + index +" -> " + tempList.get(i));
-				if(!visited[tempList.get(i)]){
-					startTargets(tempList.get(i),numSteps-1);
-				} else {
-					System.out.println("Index:" + index + " Did not enter " + tempList.get(i));
-				}
+				System.out.println("Trying " + tempList.get(i));
+				startTargets(tempList.get(i),numSteps-1);
+			}	
+		} else {
+			if( !targets.contains(index) && !visited[index] ){
+				System.out.println("Added " + index);
+				targets.add(index);
 			}
 			return;
-		} else {
-			System.out.println("--> I'm Adding index " + index + " to targets.");
-			targets.add(index);
-			return;
 		}
+		visited[index] = false;
 	}
 
 	public Set<Integer> getTargets(){
