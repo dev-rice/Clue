@@ -9,13 +9,35 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 
-	public void loadConfigFiles(){
+	public void loadConfigFiles(String layout, String legend){
 
 	}
+	
+	public int getNumRows() {
+		return numRows;
+	}
+	
+	public int getNumColumns() {
+		return numColumns;
+	}
+	
 	public int calcIndex(int row, int column){
 		return column + row*numColumns;
 	}
+	
 	public RoomCell getRoomCellAt(int row, int column){
 		return new RoomCell();
 	}
+	
+	public Map<Character, String> getRooms() {
+		return rooms;
+	}
+	
+	public static void main(String[] args) throws BadConfigFormatException {
+		throw new BadConfigFormatException();
+	}
+	public BoardCell getCellAt(int index){
+		return null;
+	}
+	
 }

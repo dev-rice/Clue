@@ -9,7 +9,16 @@ public class RoomCell extends BoardCell {
 	public boolean isRoom(){
 		return true;
 	}
+	
+	public char getInitial() {
+		return room;
+	}
+
+	public DoorDirection getDoorDirection() {
+		return doorDirection;
+	}
 	public void draw(){
 
 	}
+	
 }
