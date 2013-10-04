@@ -9,8 +9,13 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 
-	public void loadConfigFiles(String layout, String legend){
+	
+	public Board() {
+		numRows = 23;
+		numColumns = 23;
+	}
 
+	public void loadConfigFiles(String layout, String legend){
 	}
 	
 	public int getNumRows() {
@@ -36,6 +41,7 @@ public class Board {
 	public static void main(String[] args) throws BadConfigFormatException {
 		throw new BadConfigFormatException();
 	}
+	
 	public BoardCell getCellAt(int index){
 		return null;
 	}
