@@ -18,13 +18,13 @@ public class clueBoardTests {
 
 	private static Board board;
 	public static final int NUM_ROOMS = 11;
-	public static final int NUM_ROWS = 23;
-	public static final int NUM_COLUMNS = 23;
+	public static final int NUM_ROWS = 24;
+	public static final int NUM_COLUMNS = 24;
 
 	@Before
 	public void init(){
 		board = new Board();
-		board.loadConfigFiles("ClueLayout.csv", "legend.conf");
+		//board.loadConfigFiles("ClueLayout.csv", "legend.conf");
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class clueBoardTests {
 			if (cell.isDoorway())
 				numDoors++;
 		}
-		Assert.assertEquals(16, numDoors);
+		Assert.assertEquals(16, numDoors); // Do we know if there's 16 doors?
 	}
 
 	@Test

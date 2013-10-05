@@ -1,7 +1,11 @@
 package clueGame;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Board {
 	private ArrayList<BoardCell> cells;
@@ -11,11 +15,73 @@ public class Board {
 
 	
 	public Board() {
-		numRows = 23;
-		numColumns = 23;
+		numRows = 24;
+		numColumns = 24;
 	}
 
-	public void loadConfigFiles(String layout, String legend){
+	public void loadConfigFiles(String layout, String legend) throws FileNotFoundException{
+		rooms = new HashMap();
+		cells = new ArrayList<BoardCell>();
+		// ClueLayout file
+		FileReader layoutFile;
+		layoutFile = new FileReader(layout);
+		Scanner layoutScanner = new Scanner(layoutFile);
+		// Legend file
+		FileReader configFile;
+		configFile = new FileReader(legend);
+		Scanner configScanner = new Scanner(configFile);
+		// Parsing the config file
+		String curLine;
+		String curChar;
+		String curStr;
+		while(configScanner.hasNext()){
+			curLine = configScanner.nextLine();
+			curChar = (curLine.split(",")[0]);
+			curStr = curLine.split(",")[1];
+			rooms.put(curChar.charAt(0), curStr);
+		}
+		// Parsing the layout file
+		String curTag;
+		int j = 0;
+		while(layoutScanner.hasNext()){
+			curTag = layoutScanner.next();
+			String[] curTagArr = curTag.split(",");
+			for(int i = 0; i < 24; ++i){
+				if( curTagArr[i].equals("W")){
+					// It's a walkway
+					BoardCell walkway = new WalkwayCell(j,i);
+					cells.add(walkway);
+				} else {
+					if(curTagArr[i].length() == 2){
+						// it's a roomcell with a door
+						RoomCell.DoorDirection dir = null;
+						switch(curTagArr[i].charAt(1)){
+						case 'D':
+							dir = RoomCell.DoorDirection.DOWN;
+							break;
+						case 'U':
+							dir = RoomCell.DoorDirection.UP;
+							break;
+						case 'R':
+							dir = RoomCell.DoorDirection.RIGHT;
+							break;
+						case 'L':
+							dir = RoomCell.DoorDirection.LEFT;
+							break;
+						}
+						BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),dir);
+						cells.add(room);
+						//cells.add(calcIndex(j,i), room);
+					} else {
+						// it's a roomcell without a door
+						BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),RoomCell.DoorDirection.NONE);
+						//cells.add(calcIndex(j,i), room);
+						cells.add(room);
+					}
+				}	
+			}
+			j++;
+		}
 	}
 	
 	public int getNumRows() {
@@ -31,7 +97,7 @@ public class Board {
 	}
 	
 	public RoomCell getRoomCellAt(int row, int column){
-		return new RoomCell();
+		return new RoomCell(column, column, (char) 0, null); // Here thar be fuckups
 	}
 	
 	public Map<Character, String> getRooms() {
@@ -39,11 +105,19 @@ public class Board {
 	}
 	
 	public static void main(String[] args) throws BadConfigFormatException {
-		throw new BadConfigFormatException();
+		Board a = new Board();
+		try {
+			a.loadConfigFiles("ClueLayout.csv", "legend.conf");
+		} catch (FileNotFoundException e) {
+			throw new BadConfigFormatException();
+		}
+		for(int i = 0; i<575; ++i){
+			System.out.println(i + ": " + a.getCellAt(i));
+		}	
 	}
 	
 	public BoardCell getCellAt(int index){
-		return null;
+		return cells.get(index);
 	}
 	
 }

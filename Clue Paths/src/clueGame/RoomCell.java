@@ -6,6 +6,12 @@ public class RoomCell extends BoardCell {
 	private DoorDirection doorDirection;
 	private char room;
 
+	public RoomCell(int row, int column, char room, DoorDirection dd) {
+		super(row, column);
+		this.room = room;
+		doorDirection = dd;
+	}
+
 	public boolean isRoom(){
 		return true;
 	}
@@ -20,5 +26,12 @@ public class RoomCell extends BoardCell {
 	public void draw(){
 
 	}
+
+	@Override
+	public String toString() {
+		return "RoomCell [doorDirection=" + doorDirection + ", room=" + room
+				+ "]";
+	}
+	
 	
 }
