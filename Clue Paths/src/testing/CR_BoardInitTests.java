@@ -1,5 +1,8 @@
 package testing;
 
+// Doing a static import allows me to write assertEquals rather than
+// Assert.assertEquals
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
@@ -15,57 +18,59 @@ import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.RoomCell;
 
-public class clueBoardTests {
-
+public class CR_BoardInitTests {
+	// I made this static because I only want to set it up one 
+	// time (using @BeforeClass), no need to do setup before each test
 	private static Board board;
 	public static final int NUM_ROOMS = 11;
-	public static final int NUM_ROWS = 24;
-	public static final int NUM_COLUMNS = 24;
-
+	public static final int NUM_ROWS = 22;
+	public static final int NUM_COLUMNS = 23;
+	
 	@Before
-	public void init() throws FileNotFoundException, BadConfigFormatException{
-		board = new Board("ClueLayout.csv", "legend.conf", NUM_ROWS, NUM_COLUMNS);
+	public void setUp() throws FileNotFoundException, BadConfigFormatException {
+		board = new Board("RaderTests/ClueLayout.csv", "RaderTests/ClueLegend.txt", NUM_ROWS, NUM_COLUMNS);
 		board.loadConfigFiles();
 	}
-
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testRooms() {
 		Map<Character, String> rooms = board.getRooms();
-		System.out.println(rooms);
 		// Ensure we read the correct number of rooms
 		assertEquals(NUM_ROOMS, rooms.size());
 		// Test retrieving a few from the hash, including the first
 		// and last in the file and a few others
-		assertEquals("Cabin", rooms.get('C'));
-		assertEquals("Weapons Room", rooms.get('X'));
-		assertEquals("Magazine", rooms.get('M'));
-		assertEquals("Life Support", rooms.get('L'));
+		assertEquals("Conservatory", rooms.get('C'));
+		assertEquals("Ballroom", rooms.get('B'));
+		assertEquals("Billiard room", rooms.get('R'));
+		assertEquals("Dining room", rooms.get('D'));
 		assertEquals("Walkway", rooms.get('W'));
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
 		assertEquals(NUM_ROWS, board.getNumRows());
 		assertEquals(NUM_COLUMNS, board.getNumColumns());		
 	}
-
+	
 	// Test a doorway in each direction, plus two cells that are not
 	// a doorway.
 	// These cells are white on the planning spreadsheet
+	@SuppressWarnings("deprecation")
 	@Test
 	public void FourDoorDirections() {
 		// Test one each RIGHT/LEFT/UP/DOWN
-		RoomCell room = board.getRoomCellAt(2, 4);
+		RoomCell room = board.getRoomCellAt(4, 3);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
-		room = board.getRoomCellAt(5, 20);
+		room = board.getRoomCellAt(4, 8);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
-		room = board.getRoomCellAt(3, 7);
+		room = board.getRoomCellAt(15, 18);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
-		room = board.getRoomCellAt(2, 13);
+		room = board.getRoomCellAt(14, 11);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
 		// Test that room pieces that aren't doors know it
@@ -76,73 +81,74 @@ public class clueBoardTests {
 		assertFalse(cell.isDoorway());		
 
 	}
-
+	
 	// Test that we have the correct number of doors
 	@Test
 	public void testNumberOfDoorways() 
 	{
 		int numDoors = 0;
 		int totalCells = board.getNumColumns() * board.getNumRows();
-		Assert.assertEquals(576, totalCells);
+		Assert.assertEquals(506, totalCells);
 		for (int i=0; i<totalCells; i++)
 		{
 			BoardCell cell = board.getCellAt(i);
 			if (cell.isDoorway())
 				numDoors++;
 		}
-		Assert.assertEquals(12, numDoors); // Do we know if there's 16 doors?
+		Assert.assertEquals(16, numDoors);
 	}
 
+	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testCalcIndex() {
 		// Test each corner of the board
 		assertEquals(0, board.calcIndex(0, 0));
 		assertEquals(NUM_COLUMNS-1, board.calcIndex(0, NUM_COLUMNS-1));
-		assertEquals(552, board.calcIndex(23, 0));
-		assertEquals(575, board.calcIndex(23, 23));
+		assertEquals(483, board.calcIndex(NUM_ROWS-1, 0));
+		assertEquals(505, board.calcIndex(NUM_ROWS-1, NUM_COLUMNS-1));
 		// Test a couple others
-		assertEquals(25, board.calcIndex(1, 1));
-		assertEquals(68, board.calcIndex(2, 20));		
+		assertEquals(24, board.calcIndex(1, 1));
+		assertEquals(66, board.calcIndex(2, 20));		
 	}
-
+	
 	// Test a few room cells to ensure the room initial is
 	// correct.
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testRoomInitials() {
 		assertEquals('C', board.getRoomCellAt(0, 0).getInitial());
-		assertEquals('E', board.getRoomCellAt(8, 1).getInitial());
-		assertEquals('X', board.getRoomCellAt(0, 7).getInitial());
-		assertEquals('N', board.getRoomCellAt(23, 23).getInitial());
-		assertEquals('M', board.getRoomCellAt(21, 0).getInitial());
-		assertEquals('H', board.getRoomCellAt(0, 21).getInitial());
+		assertEquals('R', board.getRoomCellAt(4, 8).getInitial());
+		assertEquals('B', board.getRoomCellAt(9, 0).getInitial());
+		assertEquals('O', board.getRoomCellAt(21, 22).getInitial());
+		assertEquals('K', board.getRoomCellAt(21, 0).getInitial());
 	}
-
+	
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadColumns() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file names
-		Board b = new Board("ClueLayoutBadColumns.csv", "legend.conf", NUM_ROWS, NUM_COLUMNS);
+		Board b = new Board("RaderTests/ClueLayoutBadColumns.csv", "RaderTests/ClueLegend.txt", NUM_ROWS, NUM_COLUMNS);
 		// You may change these calls if needed to match your function names
 		// My loadConfigFiles has a try/catch, so I can't call it directly to
 		// see test throwing the BadConfigFormatException
-		b.loadConfigFiles();
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
-
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayoutBadRoom.csv", "legend.conf", NUM_ROWS, NUM_COLUMNS);
-		b.loadConfigFiles();
+		Board b = new Board("RaderTests/ClueLayoutBadRoom.csv", "RaderTests/ClueLegend.txt", NUM_ROWS, NUM_COLUMNS);
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
-
 	// Test that an exception is thrown for a bad config file
 	@Test (expected = BadConfigFormatException.class)
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		// overloaded Board ctor takes config file name
-		Board b = new Board("ClueLayout.csv", "ClueLegendBadFormat.conf", NUM_ROWS, NUM_COLUMNS);
-		b.loadConfigFiles();
+		Board b = new Board("RaderTests/ClueLayout.csv", "RaderTests/ClueLegendBadFormat.txt", NUM_ROWS, NUM_COLUMNS);
+		b.loadRoomConfig();
+		b.loadBoardConfig();
 	}
-
-
 }

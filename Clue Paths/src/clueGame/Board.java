@@ -13,40 +13,53 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 
+	private String layout;
+	private String legend;
 
-	public Board() {
-		numRows = 24;
-		numColumns = 24;
+
+	public Board(String layout, String legend, int numRows, int numColumns) {
+		this.numRows = numRows;
+		this.numColumns = numColumns;
+		this.layout = layout;
+		this.legend = legend;
 	}
 
-	public void loadConfigFiles(String layout, String legend) throws FileNotFoundException, BadConfigFormatException{
+	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
+		// TODO Auto-generated method stub
 		rooms = new HashMap();
-		cells = new ArrayList<BoardCell>();
-		// ClueLayout file
-		FileReader layoutFile;
-		layoutFile = new FileReader(layout);
-		Scanner layoutScanner = new Scanner(layoutFile);
-		// Legend file
 		FileReader configFile;
 		configFile = new FileReader(legend);
 		Scanner configScanner = new Scanner(configFile);
-		// Parsing the config file
 		String curLine;
 		String curChar;
 		String curStr;
 		while(configScanner.hasNext()){
 			curLine = configScanner.nextLine();
-			if (!curLine.contains(",")){
-				throw new BadConfigFormatException();
+			
+			int counter = 0;
+			for( int i=0; i<curLine.length(); i++ ) {
+			    if( curLine.charAt(i) == ',' ) {
+			        counter++;
+			    } 
 			}
-			else {
+			
+			if (counter != 1){
+				throw new BadConfigFormatException();
+			} else {
 
 				curChar = curLine.split(",")[0];
 				curStr = curLine.split(", ")[1];
 				rooms.put(curChar.charAt(0), curStr);
 			}
 		}
+	}
 
+	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException {
+		// TODO Auto-generated method stub
+		cells = new ArrayList<BoardCell>();
+		FileReader layoutFile;
+		layoutFile = new FileReader(layout);
+		Scanner layoutScanner = new Scanner(layoutFile);
 		// Parsing the layout file
 		String curTag;
 		int j = 0;
@@ -54,11 +67,10 @@ public class Board {
 			curTag = layoutScanner.next();
 
 			String[] curTagArr = curTag.split(",");
-			if (curTagArr.length > numColumns){
+			if (curTagArr.length != numColumns){
 				throw new BadConfigFormatException();
-			}
-			else {
-				for(int i = 0; i < 24; ++i){
+			} else {
+				for(int i = 0; i < numColumns; ++i){
 					if( curTagArr[i].equals("W")){
 						// It's a walkway
 						BoardCell walkway = new WalkwayCell(j,i);
@@ -66,7 +78,7 @@ public class Board {
 					} else {
 						if(curTagArr[i].length() == 2){
 							// it's a roomcell with a door
-							RoomCell.DoorDirection dir = null;
+							RoomCell.DoorDirection dir = RoomCell.DoorDirection.NONE;
 							switch(curTagArr[i].charAt(1)){
 							case 'D':
 								dir = RoomCell.DoorDirection.DOWN;
@@ -99,6 +111,11 @@ public class Board {
 		}
 	}
 
+	public void loadConfigFiles() throws FileNotFoundException, BadConfigFormatException{
+		loadRoomConfig();
+		loadBoardConfig();
+	}
+
 	public int getNumRows() {
 		return numRows;
 	}
@@ -112,7 +129,6 @@ public class Board {
 	}
 
 	public RoomCell getRoomCellAt(int row, int column){
-		//return cells.get(calcIndex(row,column));
 		return (RoomCell) cells.get(calcIndex(row, column));
 	}
 
@@ -121,15 +137,7 @@ public class Board {
 	}
 
 	public static void main(String[] args) throws BadConfigFormatException {
-		Board a = new Board();
-		try {
-			a.loadConfigFiles("ClueLayout.csv", "legend.conf");
-		} catch (FileNotFoundException e) {
-			throw new BadConfigFormatException();
-		}
-		for(int i = 0; i<575; ++i){
-			System.out.println(i + ": " + a.getCellAt(i));
-		}	
+		
 	}
 
 	public BoardCell getCellAt(int index){
