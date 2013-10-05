@@ -19,7 +19,7 @@ public class Board {
 		numColumns = 24;
 	}
 
-	public void loadConfigFiles(String layout, String legend) throws FileNotFoundException{
+	public void loadConfigFiles(String layout, String legend) throws FileNotFoundException, BadConfigFormatException{
 		rooms = new HashMap();
 		cells = new ArrayList<BoardCell>();
 		// ClueLayout file
@@ -47,38 +47,44 @@ public class Board {
 			curTag = layoutScanner.next();
 			String[] curTagArr = curTag.split(",");
 			for(int i = 0; i < 24; ++i){
-				if( curTagArr[i].equals("W")){
-					// It's a walkway
-					BoardCell walkway = new WalkwayCell(j,i);
-					cells.add(walkway);
-				} else {
-					if(curTagArr[i].length() == 2){
-						// it's a roomcell with a door
-						RoomCell.DoorDirection dir = null;
-						switch(curTagArr[i].charAt(1)){
-						case 'D':
-							dir = RoomCell.DoorDirection.DOWN;
-							break;
-						case 'U':
-							dir = RoomCell.DoorDirection.UP;
-							break;
-						case 'R':
-							dir = RoomCell.DoorDirection.RIGHT;
-							break;
-						case 'L':
-							dir = RoomCell.DoorDirection.LEFT;
-							break;
-						}
-						BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),dir);
-						cells.add(room);
-						//cells.add(calcIndex(j,i), room);
+				try {
+					if( curTagArr[i].equals("W")){
+						// It's a walkway
+						BoardCell walkway = new WalkwayCell(j,i);
+						cells.add(walkway);
 					} else {
-						// it's a roomcell without a door
-						BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),RoomCell.DoorDirection.NONE);
-						//cells.add(calcIndex(j,i), room);
-						cells.add(room);
+						if(curTagArr[i].length() == 2){
+							// it's a roomcell with a door
+							RoomCell.DoorDirection dir = null;
+							switch(curTagArr[i].charAt(1)){
+							case 'D':
+								dir = RoomCell.DoorDirection.DOWN;
+								break;
+							case 'U':
+								dir = RoomCell.DoorDirection.UP;
+								break;
+							case 'R':
+								dir = RoomCell.DoorDirection.RIGHT;
+								break;
+							case 'L':
+								dir = RoomCell.DoorDirection.LEFT;
+								break;
+							}
+							BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),dir);
+							cells.add(room);
+							//cells.add(calcIndex(j,i), room);
+						} else if( rooms.containsKey(curTagArr[i].charAt(0))){
+							// it's a roomcell without a door
+							BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),RoomCell.DoorDirection.NONE);
+							//cells.add(calcIndex(j,i), room);
+							cells.add(room);
+						} else {
+							throw new BadConfigFormatException();
+						}
 					}
-				}	
+				} catch (ArrayIndexOutOfBoundsException e){
+					throw new BadConfigFormatException();
+				}
 			}
 			j++;
 		}
@@ -96,8 +102,9 @@ public class Board {
 		return column + row*numColumns;
 	}
 	
-	public RoomCell getRoomCellAt(int row, int column){
-		return new RoomCell(column, column, (char) 0, null); // Here thar be fuckups
+	public BoardCell getRoomCellAt(int row, int column){
+		//return cells.get(calcIndex(row,column));
+		return null;
 	}
 	
 	public Map<Character, String> getRooms() {
