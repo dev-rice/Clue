@@ -22,14 +22,15 @@ public class clueBoardTests {
 	public static final int NUM_COLUMNS = 24;
 
 	@Before
-	public void init(){
+	public void init() throws FileNotFoundException, BadConfigFormatException{
 		board = new Board();
-		//board.loadConfigFiles("ClueLayout.csv", "legend.conf");
+		board.loadConfigFiles("ClueLayout.csv", "legend.conf");
 	}
 
 	@Test
 	public void testRooms() {
 		Map<Character, String> rooms = board.getRooms();
+		System.out.println(rooms);
 		// Ensure we read the correct number of rooms
 		assertEquals(NUM_ROOMS, rooms.size());
 		// Test retrieving a few from the hash, including the first
@@ -54,16 +55,16 @@ public class clueBoardTests {
 	@Test
 	public void FourDoorDirections() {
 		// Test one each RIGHT/LEFT/UP/DOWN
-		RoomCell room = board.getRoomCellAt(4, 3);
+		RoomCell room = board.getRoomCellAt(2, 4);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.RIGHT, room.getDoorDirection());
-		room = board.getRoomCellAt(4, 8);
+		room = board.getRoomCellAt(5, 20);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.DOWN, room.getDoorDirection());
-		room = board.getRoomCellAt(15, 18);
+		room = board.getRoomCellAt(3, 7);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.LEFT, room.getDoorDirection());
-		room = board.getRoomCellAt(14, 11);
+		room = board.getRoomCellAt(2, 13);
 		assertTrue(room.isDoorway());
 		assertEquals(RoomCell.DoorDirection.UP, room.getDoorDirection());
 		// Test that room pieces that aren't doors know it
@@ -81,14 +82,14 @@ public class clueBoardTests {
 	{
 		int numDoors = 0;
 		int totalCells = board.getNumColumns() * board.getNumRows();
-		Assert.assertEquals(506, totalCells);
+		Assert.assertEquals(576, totalCells);
 		for (int i=0; i<totalCells; i++)
 		{
 			BoardCell cell = board.getCellAt(i);
 			if (cell.isDoorway())
 				numDoors++;
 		}
-		Assert.assertEquals(16, numDoors); // Do we know if there's 16 doors?
+		Assert.assertEquals(12, numDoors); // Do we know if there's 16 doors?
 	}
 
 	@Test
@@ -96,11 +97,11 @@ public class clueBoardTests {
 		// Test each corner of the board
 		assertEquals(0, board.calcIndex(0, 0));
 		assertEquals(NUM_COLUMNS-1, board.calcIndex(0, NUM_COLUMNS-1));
-		assertEquals(483, board.calcIndex(NUM_ROWS-1, 0));
-		assertEquals(505, board.calcIndex(NUM_ROWS-1, NUM_COLUMNS-1));
+		assertEquals(552, board.calcIndex(23, 0));
+		assertEquals(575, board.calcIndex(23, 23));
 		// Test a couple others
-		assertEquals(24, board.calcIndex(1, 1));
-		assertEquals(66, board.calcIndex(2, 20));		
+		assertEquals(25, board.calcIndex(1, 1));
+		assertEquals(68, board.calcIndex(2, 20));		
 	}
 
 	// Test a few room cells to ensure the room initial is
@@ -108,10 +109,11 @@ public class clueBoardTests {
 	@Test
 	public void testRoomInitials() {
 		assertEquals('C', board.getRoomCellAt(0, 0).getInitial());
-		assertEquals('E', board.getRoomCellAt(4, 8).getInitial());
-		assertEquals('X', board.getRoomCellAt(9, 0).getInitial());
-		assertEquals('N', board.getRoomCellAt(21, 22).getInitial());
-		assertEquals('H', board.getRoomCellAt(21, 0).getInitial());
+		assertEquals('E', board.getRoomCellAt(8, 1).getInitial());
+		assertEquals('X', board.getRoomCellAt(0, 7).getInitial());
+		assertEquals('N', board.getRoomCellAt(23, 23).getInitial());
+		assertEquals('M', board.getRoomCellAt(21, 0).getInitial());
+		assertEquals('H', board.getRoomCellAt(0, 21).getInitial());
 	}
 
 	// Test that an exception is thrown for a bad config file

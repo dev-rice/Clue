@@ -19,4 +19,5 @@ public abstract class BoardCell {
 		return false;
 	}
 	public abstract void draw();
+	
 }

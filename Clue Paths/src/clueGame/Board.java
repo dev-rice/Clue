@@ -13,7 +13,7 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 
-	
+
 	public Board() {
 		numRows = 24;
 		numColumns = 24;
@@ -36,18 +36,29 @@ public class Board {
 		String curStr;
 		while(configScanner.hasNext()){
 			curLine = configScanner.nextLine();
-			curChar = (curLine.split(",")[0]);
-			curStr = curLine.split(",")[1];
-			rooms.put(curChar.charAt(0), curStr);
+			if (!curLine.contains(",")){
+				throw new BadConfigFormatException();
+			}
+			else {
+
+				curChar = curLine.split(",")[0];
+				curStr = curLine.split(", ")[1];
+				rooms.put(curChar.charAt(0), curStr);
+			}
 		}
+
 		// Parsing the layout file
 		String curTag;
 		int j = 0;
 		while(layoutScanner.hasNext()){
 			curTag = layoutScanner.next();
+
 			String[] curTagArr = curTag.split(",");
-			for(int i = 0; i < 24; ++i){
-				try {
+			if (curTagArr.length > numColumns){
+				throw new BadConfigFormatException();
+			}
+			else {
+				for(int i = 0; i < 24; ++i){
 					if( curTagArr[i].equals("W")){
 						// It's a walkway
 						BoardCell walkway = new WalkwayCell(j,i);
@@ -82,35 +93,33 @@ public class Board {
 							throw new BadConfigFormatException();
 						}
 					}
-				} catch (ArrayIndexOutOfBoundsException e){
-					throw new BadConfigFormatException();
 				}
 			}
 			j++;
 		}
 	}
-	
+
 	public int getNumRows() {
 		return numRows;
 	}
-	
+
 	public int getNumColumns() {
 		return numColumns;
 	}
-	
+
 	public int calcIndex(int row, int column){
 		return column + row*numColumns;
 	}
-	
-	public BoardCell getRoomCellAt(int row, int column){
+
+	public RoomCell getRoomCellAt(int row, int column){
 		//return cells.get(calcIndex(row,column));
-		return null;
+		return (RoomCell) cells.get(calcIndex(row, column));
 	}
-	
+
 	public Map<Character, String> getRooms() {
 		return rooms;
 	}
-	
+
 	public static void main(String[] args) throws BadConfigFormatException {
 		Board a = new Board();
 		try {
@@ -122,9 +131,9 @@ public class Board {
 			System.out.println(i + ": " + a.getCellAt(i));
 		}	
 	}
-	
+
 	public BoardCell getCellAt(int index){
 		return cells.get(index);
 	}
-	
+
 }

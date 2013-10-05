@@ -10,11 +10,17 @@ public class RoomCell extends BoardCell {
 		super(row, column);
 		this.room = room;
 		doorDirection = dd;
+		//if (dd != DoorDirection.NONE)
 	}
 
 	public boolean isRoom(){
 		return true;
 	}
+	
+	public boolean isDoorway(){
+		return doorDirection != DoorDirection.NONE;
+	}
+	
 	
 	public char getInitial() {
 		return room;
