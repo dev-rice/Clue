@@ -17,7 +17,8 @@ public class Board {
 
 	private String layout;
 	private String legend;
-
+	
+	private Map<Integer, LinkedList<Integer>> adjList;
 
 	public Board(String layout, String legend, int numRows, int numColumns) {
 		this.numRows = numRows;
@@ -37,14 +38,14 @@ public class Board {
 		String curStr;
 		while(configScanner.hasNext()){
 			curLine = configScanner.nextLine();
-			
+
 			int counter = 0;
 			for( int i=0; i<curLine.length(); i++ ) {
-			    if( curLine.charAt(i) == ',' ) {
-			        counter++;
-			    } 
+				if( curLine.charAt(i) == ',' ) {
+					counter++;
+				} 
 			}
-			
+
 			if (counter != 1){
 				throw new BadConfigFormatException();
 			} else {
@@ -138,31 +139,66 @@ public class Board {
 		return rooms;
 	}
 
-	public static void main(String[] args) throws BadConfigFormatException {
-		
-	}
-
 	public BoardCell getCellAt(int index){
 		return cells.get(index);
 	}
 
 	public void calcAdjacencies() {
 		// TODO implement this part
+		// Iterates through the entire board, creating a master list
+		// of adjacencies as it goes
+		adjList = new HashMap<Integer, LinkedList<Integer>>();
+		
+		LinkedList<Integer> locAdj;
+		for(int col=0; col < numColumns; ++col){
+			for(int row=0; row < numRows; ++row){
+				LinkedList<Integer> valid_Indices = new LinkedList<Integer>();
+
+				BoardCell cell = getCellAt(calcIndex(row, col));
+				
+				if (cell.isDoorway()){
+					cell = (RoomCell) cell;
+					System.out.println(getRoomCellAt(row, col).getDoorDirection());
+					
+				} else if (!cell.isRoom()) {
+					if ( row-1>=0 ){
+						valid_Indices.add(calcIndex(row-1,col));
+					}
+					if ( row+1 < numRows ){
+						valid_Indices.add(calcIndex(row+1,col));
+					}
+					if ( col-1 >= 0 ){
+						valid_Indices.add(calcIndex(row,col-1));
+					}
+					if ( col+1 < numColumns ){
+						valid_Indices.add(calcIndex(row,col+1));
+					}
+				} else if (cell.isRoom()) {
+					System.out.println("room at " + row + ", " + col );
+				}
+				adjList.put(calcIndex(row,col), valid_Indices);
+			}
+		}
 	}
 
-	public LinkedList<Integer> getAdjList(int calcIndex) {
-		// TODO  implement this part
-		return null;
+	public LinkedList<Integer> getAdjList(int index) {
+		return adjList.get(index);
 	}
 
 	public void calcTargets(int i, int j, int k) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Set<BoardCell> getTargets() {
 		// TODO  implement this part
 		return null;
+	}
+
+	public static void main(String[] args) throws BadConfigFormatException, FileNotFoundException {
+		Board b = new Board("ClueLayout.csv", "legend.conf", 24, 24);
+		b.loadConfigFiles();
+		b.calcAdjacencies();
 	}
 
 }

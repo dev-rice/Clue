@@ -15,11 +15,14 @@ import clueGame.BoardCell;
 
 public class clueBoardAdjacencyTests {
 	private static Board board;
+	public static final int NUM_ROOMS = 11;
+	public static final int NUM_ROWS = 24;
+	public static final int NUM_COLUMNS = 24;
 	
 	@Before
 	public void setUp() throws FileNotFoundException, BadConfigFormatException {
-		board = new Board();
-		board.loadConfigFiles("ClueLayout.csv", "legend.conf");
+		board = new Board("ClueLayout.csv", "legend.conf", NUM_ROWS, NUM_COLUMNS);
+		board.loadConfigFiles();
 		board.calcAdjacencies();
 	}
 
