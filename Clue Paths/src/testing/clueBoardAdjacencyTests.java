@@ -258,15 +258,10 @@ public class clueBoardAdjacencyTests {
 	public void testTargetsSixSteps() {
 		board.startTargets(12, 15, 6);
 		Set<BoardCell> targets= board.getTargets();
-		Assert.assertEquals(6, targets.size());
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 6))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 5))));	
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 3))));	
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 4))));	
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 1))));	
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 2))));	
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(13, 4))));	
-	}	/*
+		Assert.assertEquals(2, targets.size());
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(6, 15))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(18, 15))));	
+	}
 	
 	// Test getting into a room
 	// These are LIGHT BLUE on the planning spreadsheet
@@ -275,19 +270,16 @@ public class clueBoardAdjacencyTests {
 	public void testTargetsIntoRoom()
 	{
 		// One room is exactly 2 away
-		board.startTargets(17, 16, 2);
+		board.startTargets(6, 19, 2);
 		Set<BoardCell> targets= board.getTargets();
 		Assert.assertEquals(7, targets.size());
-		// directly left (can't go right 2 steps)
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(17, 14))));
-		// directly up and down
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 16))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(19, 16))));
-		// one up/down, one left/right
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(18, 17))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(18, 15))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(16, 17))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(16, 15))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(5, 20))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(5, 18))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(7, 18))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(7, 20))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(6, 21))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(8, 19))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(4, 19))));
 	}
 	
 	// Test getting into room, doesn't require all steps
@@ -295,29 +287,14 @@ public class clueBoardAdjacencyTests {
 	@Test
 	public void testTargetsIntoRoomShortcut() 
 	{
-		board.startTargets(12, 7, 3);
+		board.startTargets(22, 13, 2);
 		Set<BoardCell> targets= board.getTargets();
-		Assert.assertEquals(12, targets.size());
-		// directly up and down
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 7))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(9, 7))));
-		// directly right (can't go left)
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(12, 10))));
-		// right then down
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(13, 9))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(13, 7))));
-		// down then left/right
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 6))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 8))));
-		// right then up
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(10, 8))));
-		// into the rooms
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(11, 6))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(10, 6))));		
-		// 
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(11, 7))));		
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(12, 8))));		
-		
+		Assert.assertEquals(6, targets.size());
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(21, 13))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(21, 12))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(22, 11))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(23, 12))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(22, 15))));
 	}
 
 	// Test getting out of a room
@@ -326,18 +303,18 @@ public class clueBoardAdjacencyTests {
 	public void testRoomExit()
 	{
 		// Take one step, essentially just the adj list
-		board.startTargets(4, 20, 1);
+		board.startTargets(2, 4, 1);
 		Set<BoardCell> targets= board.getTargets();
 		// Ensure doesn't exit through the wall
 		Assert.assertEquals(1, targets.size());
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(4, 19))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(2, 5))));
 		// Take two steps
-		board.startTargets(4, 20, 2);
+		board.startTargets(18, 20, 2);
 		targets= board.getTargets();
 		Assert.assertEquals(3, targets.size());
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(3, 19))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(5, 19))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(4, 18))));
-	}*/
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(17, 19))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(16, 20))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(17, 21))));
+	}
 
 }

@@ -248,7 +248,7 @@ public class Board {
 				if (temp_cell.isDoorway()){
 					//System.out.println("I found a doorway!");
 					targets.add(temp_cell);
-				} else {
+				} else if (! visited[tempList.get(i)]){
 					calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
 				}
 			}	
