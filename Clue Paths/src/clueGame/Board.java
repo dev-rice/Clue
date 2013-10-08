@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
@@ -19,6 +20,9 @@ public class Board {
 	private String legend;
 
 	private Map<Integer, LinkedList<Integer>> adjList;
+	
+	private Set<BoardCell> targets = new HashSet<BoardCell>();
+	private boolean visited[] = new boolean[1000];
 
 	public Board(String layout, String legend, int numRows, int numColumns) {
 		this.numRows = numRows;
@@ -198,8 +202,6 @@ public class Board {
 						} else if (temp_cell.isDoorway()){
 							RoomCell door = getRoomCellAt(temp_cell.getRow(), temp_cell.getColumn());
 
-							System.out.println("Doorway (" + door.getDoorDirection() + "): " + temp_indices.get(i));
-
 							if (door.getDoorDirection() == RoomCell.DoorDirection.UP && row == (door.getRow() - 1)){
 								valid_Indices.add(temp_indices.get(i));
 							} else if (door.getDoorDirection() == RoomCell.DoorDirection.DOWN && row == (door.getRow() + 1)){
@@ -225,20 +227,43 @@ public class Board {
 		return adjList.get(index);
 	}
 
-	public void calcTargets(int i, int j, int k) {
+	public void calcTargets(int row, int column, int numSteps) {
 		// TODO Auto-generated method stub
-
+		int index = calcIndex(row, column);
+		LinkedList<Integer> tempList = getAdjList(index);
+		System.out.println(tempList);
+		System.out.println("Index: " + index + " with steps left: " + numSteps);
+	
+		if( numSteps > 0 ){
+			visited[index] = true;
+			for(int i = 0; i < tempList.size(); ++i){
+				BoardCell temp_cell = getCellAt(tempList.get(i));
+				System.out.println("Trying " + temp_cell + ", index: " 
+						+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
+				calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
+			}	
+		} else {
+			if( !targets.contains(index) && !visited[index] ){
+				System.out.println("Added " + index);
+				targets.add(getCellAt(index));
+			}
+			//return;
+		}
+		visited[index] = false;
 	}
 
 	public Set<BoardCell> getTargets() {
 		// TODO  implement this part
-		return null;
+		return targets;
 	}
 
 	public static void main(String[] args) throws BadConfigFormatException, FileNotFoundException {
-		Board b = new Board("ClueLayout.csv", "legend.conf", 24, 24);
-		b.loadConfigFiles();
-		b.calcAdjacencies();
+		Board board = new Board("ClueLayout.csv", "legend.conf", 24, 24);
+		board.loadConfigFiles();
+		board.calcAdjacencies();
+		
+		board.calcTargets(5, 6, 2);
+		System.out.println(board.getTargets());
 	}
 
 }

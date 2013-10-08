@@ -25,6 +25,14 @@ public abstract class BoardCell {
 	public int getColumn() {
 		return column;
 	}
+	
+	@Override
+	public String toString() {
+		return "BoardCell (" + row + ", " + column + ")";
+	}
+	
 	public abstract void draw();
+	
+	
 	
 }
