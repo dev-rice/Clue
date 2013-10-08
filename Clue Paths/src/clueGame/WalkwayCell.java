@@ -13,4 +13,9 @@ public class WalkwayCell extends BoardCell {
 	public void draw(){
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "BoardCell (" + super.getRow() + ", " + super.getColumn() + ")";
+	}
 }

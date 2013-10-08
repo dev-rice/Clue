@@ -189,18 +189,18 @@ public class clueBoardAdjacencyTests {
 	// These are LIGHT BLUE on the planning spreadsheet
 	@Test
 	public void testTargetsOneStep() {
-		board.calcTargets(21, 7, 1);
+		board.calcTargets(0, 5, 1);
 		Set<BoardCell> targets= board.getTargets();
 		Assert.assertEquals(2, targets.size());
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(20, 7))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(21, 6))));	
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(1, 5))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 6))));	
 		
-		board.calcTargets(14, 0, 1);
+		board.calcTargets(1, 14, 1);
 		targets= board.getTargets();
 		Assert.assertEquals(3, targets.size());
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(14, 1))));
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(13, 0))));	
-		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(15, 0))));			
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 14))));
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(1, 13))));	
+		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(1, 15))));			
 	}
 	// Tests of just walkways, 2 steps
 	// These are LIGHT BLUE on the planning spreadsheet

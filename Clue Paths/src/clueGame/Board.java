@@ -20,7 +20,7 @@ public class Board {
 	private String legend;
 
 	private Map<Integer, LinkedList<Integer>> adjList;
-	
+
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private boolean visited[] = new boolean[1000];
 
@@ -233,21 +233,27 @@ public class Board {
 		LinkedList<Integer> tempList = getAdjList(index);
 		System.out.println(tempList);
 		System.out.println("Index: " + index + " with steps left: " + numSteps);
-	
+
 		if( numSteps > 0 ){
 			visited[index] = true;
 			for(int i = 0; i < tempList.size(); ++i){
 				BoardCell temp_cell = getCellAt(tempList.get(i));
 				System.out.println("Trying " + temp_cell + ", index: " 
 						+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
-				calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
+
+				if (temp_cell.isDoorway()){
+					System.out.println("I found a doorway!");
+					targets.add(temp_cell);
+				}else {
+					calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
+				}
 			}	
 		} else {
 			if( !targets.contains(index) && !visited[index] ){
 				System.out.println("Added " + index);
 				targets.add(getCellAt(index));
 			}
-			//return;
+			return;
 		}
 		visited[index] = false;
 	}
@@ -261,8 +267,8 @@ public class Board {
 		Board board = new Board("ClueLayout.csv", "legend.conf", 24, 24);
 		board.loadConfigFiles();
 		board.calcAdjacencies();
-		
-		board.calcTargets(5, 6, 2);
+
+		board.calcTargets(3, 6, 2);
 		System.out.println(board.getTargets());
 	}
 
