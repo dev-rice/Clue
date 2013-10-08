@@ -21,7 +21,7 @@ public class Board {
 
 	private Map<Integer, LinkedList<Integer>> adjList;
 
-	private Set<BoardCell> targets = new HashSet<BoardCell>();
+	private Set<BoardCell> targets;
 	private boolean visited[] = new boolean[1000];
 
 	public Board(String layout, String legend, int numRows, int numColumns) {
@@ -226,31 +226,35 @@ public class Board {
 	public LinkedList<Integer> getAdjList(int index) {
 		return adjList.get(index);
 	}
-
+	public void startTargets(int row, int column, int numSteps){
+		targets = new HashSet<BoardCell>();
+		targets.add(getCellAt(calcIndex(row,column)));
+		calcTargets(row, column, numSteps);
+		targets.remove(getCellAt(calcIndex(row,column)));
+	}
 	public void calcTargets(int row, int column, int numSteps) {
-		// TODO Auto-generated method stub
 		int index = calcIndex(row, column);
 		LinkedList<Integer> tempList = getAdjList(index);
-		System.out.println(tempList);
-		System.out.println("Index: " + index + " with steps left: " + numSteps);
+		//System.out.println(tempList);
+		//System.out.println("Index: " + index + " with steps left: " + numSteps);
 
 		if( numSteps > 0 ){
 			visited[index] = true;
 			for(int i = 0; i < tempList.size(); ++i){
 				BoardCell temp_cell = getCellAt(tempList.get(i));
-				System.out.println("Trying " + temp_cell + ", index: " 
-						+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
+				//System.out.println("Trying " + temp_cell + ", index: " 
+						//+ calcIndex(temp_cell.getRow(), temp_cell.getColumn()));
 
 				if (temp_cell.isDoorway()){
-					System.out.println("I found a doorway!");
+					//System.out.println("I found a doorway!");
 					targets.add(temp_cell);
-				}else {
+				} else {
 					calcTargets(temp_cell.getRow(), temp_cell.getColumn(), numSteps-1);
 				}
 			}	
 		} else {
 			if( !targets.contains(index) && !visited[index] ){
-				System.out.println("Added " + index);
+				//System.out.println("Added " + index);
 				targets.add(getCellAt(index));
 			}
 			return;
