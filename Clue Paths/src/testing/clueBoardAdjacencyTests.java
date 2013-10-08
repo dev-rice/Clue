@@ -190,13 +190,14 @@ public class clueBoardAdjacencyTests {
 	@Test
 	public void testTargetsOneStep() {
 		board.calcTargets(0, 5, 1);
-		Set<BoardCell> targets= board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		Assert.assertEquals(2, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(1, 5))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 6))));	
 		
 		board.calcTargets(1, 14, 1);
-		targets= board.getTargets();
+		targets = board.getTargets();
+		System.out.println("Targets: " + targets);
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(0, 14))));
 		Assert.assertTrue(targets.contains(board.getCellAt(board.calcIndex(1, 13))));	

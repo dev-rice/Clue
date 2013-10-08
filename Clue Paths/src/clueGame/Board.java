@@ -268,7 +268,7 @@ public class Board {
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 
-		board.calcTargets(3, 6, 2);
+		board.calcTargets(1, 14, 1);
 		System.out.println(board.getTargets());
 	}
 
