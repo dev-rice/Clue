@@ -18,6 +18,13 @@ public abstract class BoardCell {
 	public boolean isDoorway(){
 		return false;
 	}
+	
+	public int getRow() {
+		return row;
+	}
+	public int getColumn() {
+		return column;
+	}
 	public abstract void draw();
 	
 }

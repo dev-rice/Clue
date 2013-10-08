@@ -17,7 +17,7 @@ public class Board {
 
 	private String layout;
 	private String legend;
-	
+
 	private Map<Integer, LinkedList<Integer>> adjList;
 
 	public Board(String layout, String legend, int numRows, int numColumns) {
@@ -148,33 +148,73 @@ public class Board {
 		// Iterates through the entire board, creating a master list
 		// of adjacencies as it goes
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
-		
-		LinkedList<Integer> locAdj;
+
 		for(int col=0; col < numColumns; ++col){
 			for(int row=0; row < numRows; ++row){
 				LinkedList<Integer> valid_Indices = new LinkedList<Integer>();
 
 				BoardCell cell = getCellAt(calcIndex(row, col));
-				
+
 				if (cell.isDoorway()){
-					cell = (RoomCell) cell;
-					System.out.println(getRoomCellAt(row, col).getDoorDirection());
-					
-				} else if (!cell.isRoom()) {
-					if ( row-1>=0 ){
+					RoomCell.DoorDirection dir = getRoomCellAt(row, col).getDoorDirection();
+
+					if (dir == RoomCell.DoorDirection.UP){
+						//System.out.println("Doorway (" + dir + "): " + row + ", " + col + " Exit: " + (row -1) + ", " + col);
 						valid_Indices.add(calcIndex(row-1,col));
-					}
-					if ( row+1 < numRows ){
+
+					} else if (dir == RoomCell.DoorDirection.DOWN){
+						//System.out.println("Doorway (" + dir + "): " + row + ", " + col + " Exit: " + (row +1) + ", " + col);
 						valid_Indices.add(calcIndex(row+1,col));
-					}
-					if ( col-1 >= 0 ){
+
+					} else if (dir == RoomCell.DoorDirection.LEFT){
+						//System.out.println("Doorway (" + dir + "): " + row + ", " + col + " Exit: " + row + ", " + (col-1));
 						valid_Indices.add(calcIndex(row,col-1));
-					}
-					if ( col+1 < numColumns ){
+
+					} else if (dir == RoomCell.DoorDirection.RIGHT){
+						//System.out.println("Doorway (" + dir + "): " + row + ", " + col + " Exit: " + row  + ", " + (col+1));
 						valid_Indices.add(calcIndex(row,col+1));
 					}
+
+				} else if (cell.isWalkway()) {
+					LinkedList<Integer> temp_indices = new LinkedList<Integer>();
+					if (row > 0){
+						temp_indices.add(calcIndex(row -1, col));
+					} 
+					if (row < numRows -1){
+						temp_indices.add(calcIndex(row +1, col));
+					}
+					if (col > 0){
+						temp_indices.add(calcIndex(row, col - 1));
+					}
+					if (col < numColumns - 1){
+						temp_indices.add(calcIndex(row, col + 1));
+					}
+
+					for (int i = 0; i < temp_indices.size(); ++i){
+						BoardCell temp_cell = getCellAt(temp_indices.get(i));
+
+						if (temp_cell.isWalkway()){
+							valid_Indices.add(temp_indices.get(i));
+						} else if (temp_cell.isDoorway()){
+							RoomCell door = getRoomCellAt(temp_cell.getRow(), temp_cell.getColumn());
+
+							System.out.println("Doorway (" + door.getDoorDirection() + "): " + temp_indices.get(i));
+
+							if (door.getDoorDirection() == RoomCell.DoorDirection.UP && row == (door.getRow() - 1)){
+								valid_Indices.add(temp_indices.get(i));
+							} else if (door.getDoorDirection() == RoomCell.DoorDirection.DOWN && row == (door.getRow() + 1)){
+								valid_Indices.add(temp_indices.get(i));
+							} else if (door.getDoorDirection() == RoomCell.DoorDirection.LEFT && col == (door.getColumn() - 1)){
+								valid_Indices.add(temp_indices.get(i));
+							} else if (door.getDoorDirection() == RoomCell.DoorDirection.RIGHT && col == (door.getColumn() + 1)){
+								valid_Indices.add(temp_indices.get(i));
+							}
+
+						}
+					}
+
 				} else if (cell.isRoom()) {
-					System.out.println("room at " + row + ", " + col );
+					//System.out.println("room at " + row + ", " + col );
 				}
 				adjList.put(calcIndex(row,col), valid_Indices);
 			}
