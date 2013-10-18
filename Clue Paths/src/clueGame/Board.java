@@ -126,8 +126,9 @@ public class Board {
 		try{
 			loadBoardConfig();
 		}catch(BadConfigFormatException e){
-			visited = new boolean[numRows*numColumns];
+			System.out.println(e);
 		}
+		visited = new boolean[numRows*numColumns];
 	}
 
 	public int getNumRows() {
