@@ -32,7 +32,6 @@ public class Board {
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
-		// TODO Auto-generated method stub
 		rooms = new HashMap();
 		FileReader configFile;
 		configFile = new FileReader(legend);
@@ -62,7 +61,6 @@ public class Board {
 	}
 
 	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException {
-		// TODO Auto-generated method stub
 		cells = new ArrayList<BoardCell>();
 		FileReader layoutFile;
 		layoutFile = new FileReader(layout);
@@ -148,7 +146,6 @@ public class Board {
 	}
 
 	public void calcAdjacencies() {
-		// TODO implement this part
 		// Iterates through the entire board, creating a master list
 		// of adjacencies as it goes
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
@@ -263,17 +260,6 @@ public class Board {
 	}
 
 	public Set<BoardCell> getTargets() {
-		// TODO  implement this part
 		return targets;
 	}
-
-	public static void main(String[] args) throws BadConfigFormatException, FileNotFoundException {
-		Board board = new Board("ClueLayout.csv", "legend.conf", 24, 24);
-		board.loadConfigFiles();
-		board.calcAdjacencies();
-
-		board.calcTargets(1, 14, 1);
-		System.out.println(board.getTargets());
-	}
-
 }

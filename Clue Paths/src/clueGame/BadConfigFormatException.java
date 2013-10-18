@@ -12,13 +12,6 @@ public class BadConfigFormatException extends Exception{
 		try {
 			out = new PrintWriter("log.txt");
 			out.print((new Timestamp(System.currentTimeMillis())));
-			out.print("\nCurrent config files:");
-			// TODO, add stuff here
-			
-			
-			
-			
-			//
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
