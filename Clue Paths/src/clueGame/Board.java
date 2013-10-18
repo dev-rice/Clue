@@ -34,6 +34,7 @@ public class Board {
 		cells = new ArrayList<BoardCell>();
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
+		visited = new boolean[numRows*numColumns];
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
@@ -128,7 +129,6 @@ public class Board {
 		}catch(BadConfigFormatException e){
 			System.out.println(e);
 		}
-		visited = new boolean[numRows*numColumns];
 	}
 
 	public int getNumRows() {
