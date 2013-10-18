@@ -103,11 +103,9 @@ public class Board {
 							}
 							BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),dir);
 							cells.add(room);
-							//cells.add(calcIndex(j,i), room);
 						} else if( rooms.containsKey(curTagArr[i].charAt(0))){
 							// it's a roomcell without a door
 							BoardCell room = new RoomCell(j,i,curTagArr[i].charAt(0),RoomCell.DoorDirection.NONE);
-							//cells.add(calcIndex(j,i), room);
 							cells.add(room);
 						} else {
 							throw new BadConfigFormatException();
