@@ -3,6 +3,7 @@ package clueGame;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ public class Board {
 	private Map<Integer, LinkedList<Integer>> adjList;
 
 	private Set<BoardCell> targets;
-	private boolean visited[] = new boolean[1000];
+	private boolean[] visited;
 
 	public Board(String layout, String legend, int numRows, int numColumns) {
 		this.numRows = numRows;
@@ -119,6 +120,7 @@ public class Board {
 	public void loadConfigFiles() throws FileNotFoundException, BadConfigFormatException{
 		loadRoomConfig();
 		loadBoardConfig();
+		visited = new boolean[numRows*numColumns];
 	}
 
 	public int getNumRows() {
@@ -224,6 +226,7 @@ public class Board {
 		return adjList.get(index);
 	}
 	public void startTargets(int row, int column, int numSteps){
+		Arrays.fill(visited,false);//added for initialization
 		targets = new HashSet<BoardCell>();
 		targets.add(getCellAt(calcIndex(row,column)));
 		calcTargets(row, column, numSteps);
