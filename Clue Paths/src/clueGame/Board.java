@@ -30,10 +30,13 @@ public class Board {
 		this.numColumns = numColumns;
 		this.layout = layout;
 		this.legend = legend;
+		rooms = new HashMap<Character,String>();
+		cells = new ArrayList<BoardCell>();
+		adjList = new HashMap<Integer, LinkedList<Integer>>();
+		targets = new HashSet<BoardCell>();
 	}
 
 	public void loadRoomConfig() throws FileNotFoundException, BadConfigFormatException {
-		rooms = new HashMap();
 		FileReader configFile;
 		configFile = new FileReader(legend);
 		Scanner configScanner = new Scanner(configFile);
@@ -62,7 +65,6 @@ public class Board {
 	}
 
 	public void loadBoardConfig() throws FileNotFoundException, BadConfigFormatException {
-		cells = new ArrayList<BoardCell>();
 		FileReader layoutFile;
 		layoutFile = new FileReader(layout);
 		Scanner layoutScanner = new Scanner(layoutFile);
@@ -158,7 +160,6 @@ public class Board {
 	public void calcAdjacencies() {
 		// Iterates through the entire board, creating a master list
 		// of adjacencies as it goes
-		adjList = new HashMap<Integer, LinkedList<Integer>>();
 
 		for(int col=0; col < numColumns; ++col){
 			for(int row=0; row < numRows; ++row){
@@ -235,7 +236,8 @@ public class Board {
 	}
 	public void startTargets(int row, int column, int numSteps){
 		Arrays.fill(visited,false);//added for initialization
-		targets = new HashSet<BoardCell>();
+		targets.clear();
+		
 		targets.add(getCellAt(calcIndex(row,column)));
 		calcTargets(row, column, numSteps);
 		targets.remove(getCellAt(calcIndex(row,column)));
