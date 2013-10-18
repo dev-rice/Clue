@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class BadConfigFormatException extends Exception{
 
 	public BadConfigFormatException() {
-		super("Error: configuration file is corrupted.");
+		super("Error: configuration file is formatted incorrectly.");
 		PrintWriter out;
 		try {
 			out = new PrintWriter("log.txt");

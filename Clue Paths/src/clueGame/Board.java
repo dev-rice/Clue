@@ -117,10 +117,17 @@ public class Board {
 		}
 	}
 
-	public void loadConfigFiles() throws FileNotFoundException, BadConfigFormatException{
-		loadRoomConfig();
-		loadBoardConfig();
-		visited = new boolean[numRows*numColumns];
+	public void loadConfigFiles() throws FileNotFoundException{
+		try{
+			loadRoomConfig();
+		}catch (BadConfigFormatException e){
+			System.out.println(e);
+		}
+		try{
+			loadBoardConfig();
+		}catch(BadConfigFormatException e){
+			visited = new boolean[numRows*numColumns];
+		}
 	}
 
 	public int getNumRows() {
